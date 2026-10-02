@@ -1,0 +1,12 @@
+{
+  "name": "ir1fr1",
+  "local": "192.0.2.10",
+  "remote": "198.51.100.20",
+  "local_port": 5555,
+  "remote_port": 6665,
+  "local_inner": "10.240.0.1",
+  "remote_inner": "10.240.0.2",
+  "key": 12345,
+  "mtu": 1380,
+  "forwards": []
+}

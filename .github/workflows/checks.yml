@@ -1,0 +1,30 @@
+name: Checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell syntax and Python tests
+        run: |
+          bash -n gre-fou-manager.sh
+          bash -n install.sh
+          bash -n tests/integration.sh
+          sha256sum --check --strict checksums.sha256
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+  kernel-integration:
+    needs: unit
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install networking tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iproute2 nftables kmod iputils-ping
+      - name: GRE over FOU in isolated namespaces
+        run: sudo bash tests/integration.sh
