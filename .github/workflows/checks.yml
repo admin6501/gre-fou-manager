@@ -9,7 +9,9 @@ jobs:
   unit:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Shell syntax and Python tests
         run: |
           bash -n gre-fou-manager.sh
@@ -21,10 +23,19 @@ jobs:
     needs: unit
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Install networking tools
         run: |
           sudo apt-get update
           sudo apt-get install -y iproute2 nftables kmod iputils-ping
+      - name: Install published source by commit SHA
+        if: github.event_name != 'pull_request'
+        run: |
+          sudo bash install.sh --no-deps --ref "$GITHUB_SHA"
+          test "$(gre-fou version)" = "1.0.0"
+          sudo gre-fou status
+          sudo systemd-analyze verify /etc/systemd/system/gre-fou@.service /etc/systemd/system/gre-fou-health@.service /etc/systemd/system/gre-fou-health@.timer
       - name: GRE over FOU in isolated namespaces
         run: sudo bash tests/integration.sh

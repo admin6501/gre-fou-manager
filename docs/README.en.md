@@ -133,4 +133,4 @@ This version has no encryption or authenticated handshake. GRE keys identify tun
 
 With an IPv4 outer header, UDP and keyed GRE, added encapsulation overhead is 36 bytes per original IP packet, excluding Ethernet, retransmissions and control traffic. Smaller packets have a larger percentage overhead.
 
-IPv6 outer endpoints, NAT traversal, automatic load balancing, automatic cross-peer failover and global installer removal are not implemented. The initial development container did not permit real GRE/FOU network operations. See [verification](../README.md#verification) for unit and optional namespace testing.
+IPv6 outer endpoints, NAT traversal, automatic load balancing, automatic cross-peer failover and global installer removal are not implemented. The initial development container did not permit real GRE/FOU network operations. The Ubuntu 24.04 GitHub Actions namespace check passed on 2026-10-02 for ping, TCP/UDP forwarding, SNAT and cleanup. CI checks published-source installation by commit SHA on push events. See [verification](../README.md#verification) for unit and optional namespace testing.

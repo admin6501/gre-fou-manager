@@ -68,4 +68,4 @@ An optional root-only namespace test creates two tunnel endpoints and a third cl
 sudo bash tests/integration.sh
 ```
 
-The initial development environment denied NET_ADMIN, so real kernel/two-server traffic was not tested there. Unit tests use mocked network commands. The namespace test requires a suitable Linux host; it is not a throughput or Iran-to-foreign network benchmark.
+The initial development container denied NET_ADMIN. On 2026-10-02, the [GitHub Actions namespace test](https://github.com/admin6501/gre-fou-manager/actions/runs/36962540025) passed on Ubuntu 24.04: GRE/FOU ping, TCP/UDP forwarding, source NAT and resource cleanup. Unit tests use mocked network commands. CI also checks installation of the published source by commit SHA on push events. These checks are not a throughput or Iran-to-foreign network benchmark.
