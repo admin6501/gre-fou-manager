@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- Rename the MSS clamp chain to `tcp_mss` so nftables versions that reserve `mss` can parse the ruleset.
+- Run real namespace and published-source installation checks on Ubuntu 22.04 and 24.04.
+- Compare installed and checked-out versions dynamically in CI.
+
 ## 1.0.0
 
 - Initial Persian terminal manager for multiple independent GRE-over-FOU links.

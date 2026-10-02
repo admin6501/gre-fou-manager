@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GRE over FOU Manager 1.0.0 — IPv4 / Linux / systemd
+# GRE over FOU Manager 1.0.1 — IPv4 / Linux / systemd
 set -euo pipefail
 if ! command -v python3 >/dev/null 2>&1; then
   echo 'Python 3 لازم است. ابتدا اجرا کنید: sudo apt-get update && sudo apt-get install -y python3' >&2
@@ -9,7 +9,7 @@ export FOU_MANAGER_SELF="$(readlink -f -- "$0")"
 exec python3 -c "$(cat <<'PY'
 import argparse, base64, copy, fcntl, ipaddress, json, os, pathlib, re, secrets
 import shutil, subprocess, sys, tempfile, time, contextlib
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 BASE = pathlib.Path('/etc/gre-fou-manager')
 BIN = '/usr/local/sbin/gre-fou'
 UNITS = pathlib.Path('/etc/systemd/system')
@@ -148,7 +148,7 @@ def nft_text(c,replace=False):
       ' }',' chain forwarding { type filter hook forward priority -10; policy accept;',
       f'  iifname "{dev}" ip saddr {ri} ct state established,related counter accept',
       f'  oifname "{dev}" ip daddr {ri} ct status dnat counter accept',' }',
-      ' chain mss { type filter hook forward priority -150; policy accept;',
+      ' chain tcp_mss { type filter hook forward priority -150; policy accept;',
       f'  oifname "{dev}" tcp flags & (syn | rst) == syn tcp option maxseg size > {c["mtu"]-40} tcp option maxseg size set {c["mtu"]-40}',
       ' }','}']
     return '\n'.join(lines)+'\n'
@@ -480,7 +480,7 @@ def menu():
         except (ValueError,RuntimeError,OSError,subprocess.SubprocessError) as e: print('خطا: '+str(e),file=sys.stderr)
 
 GUIDE = """
-GRE over FOU Manager 1.0.0
+GRE over FOU Manager 1.0.1
 
 نصب روی هر دو سرور:
   sudo bash gre-fou-manager.sh install

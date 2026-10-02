@@ -65,6 +65,8 @@ class Tests(unittest.TestCase):
   self.assertIn('ct status dnat counter snat to 10.240.0.5',txt)
   self.assertIn('udp dport 5555 ip saddr != 198.51.100.2 counter drop',txt)
   self.assertIn('maxseg size set 1340',txt)
+  self.assertIn('chain tcp_mss {',txt)
+  self.assertNotIn('chain mss {',txt)
   self.assertNotIn('flush ruleset',txt)
   self.assertTrue(m.nft_text(C,True).startswith('delete table ip gfm_ir1fr1\n'))
  def test_failed_link_add_rolls_back_only_receiver(self):

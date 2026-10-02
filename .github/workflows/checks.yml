@@ -21,7 +21,10 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_*.py' -v
   kernel-integration:
     needs: unit
-    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -34,7 +37,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           sudo bash install.sh --no-deps --ref "$GITHUB_SHA"
-          test "$(gre-fou version)" = "1.0.0"
+          test "$(gre-fou version)" = "$(bash gre-fou-manager.sh version)"
           sudo gre-fou status
           sudo systemd-analyze verify /etc/systemd/system/gre-fou@.service /etc/systemd/system/gre-fou-health@.service /etc/systemd/system/gre-fou-health@.timer
       - name: GRE over FOU in isolated namespaces
